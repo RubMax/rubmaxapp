@@ -96,8 +96,11 @@
       });
     }
     
-    function createSectionButtons(sections) {
-  const navContainer = document.getElementById('section-nav');
+    const navContainer = document.getElementById('section-nav');
+  if (!navContainer) {
+    console.error('Erreur : élément #section-nav introuvable dans le DOM');
+    return;
+  }
   navContainer.innerHTML = '';
   
   sections.forEach(section => {
@@ -179,12 +182,7 @@ function handleScroll() {
 document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('scroll', handleScroll);
   
-  // Activer la première section au chargement
-  const firstSection = document.querySelector('h2');
-  if (firstSection) {
-    const firstSectionId = firstSection.id;
-    document.querySelector(`.section-btn[href="#${firstSectionId}"]`).classList.add('active');
-  }
+  
 });
     
     
