@@ -1,0 +1,21 @@
+{
+  "name": "RubMaxApp",
+  "short_name": "RubMax",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#83addc",
+  "theme_color": "#83addc",
+  "description": "Application RubMax Servicos",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
