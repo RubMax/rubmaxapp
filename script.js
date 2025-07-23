@@ -728,36 +728,57 @@ if ('serviceWorker' in navigator) {
 }
 
 let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
 
-// Cacher le bouton par défaut
-installBtn.style.display = 'none';
+// Affiche un popup personnalisé (ex : modal, bannière...)
+function showInstallPopup() {
+  const popup = document.createElement('div');
+  popup.style.position = 'fixed';
+  popup.style.bottom = '20px';
+  popup.style.left = '20px';
+  popup.style.right = '20px';
+  popup.style.padding = '20px';
+  popup.style.background = '#fff';
+  popup.style.border = '1px solid #ccc';
+  popup.style.borderRadius = '10px';
+  popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+  popup.style.zIndex = '10000';
+  popup.innerHTML = `
+    <p>Souhaitez-vous installer cette application sur votre appareil ?</p>
+    <button id="btn-install">📲 Oui, installer</button>
+    <button id="btn-fermer">❌ Non merci</button>
+  `;
+  document.body.appendChild(popup);
 
-// Détecter l'événement beforeinstallprompt
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();          // Empêche le comportement auto
-  deferredPrompt = e;          // Stocke l'événement
-
-  // Affiche le bouton seulement si l'app n'est pas installée
-  installBtn.style.display = 'inline-block';
-
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none'; // Masquer le bouton
-    deferredPrompt.prompt(); // Affiche la bannière
-
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('✅ L’utilisateur a accepté l’installation');
-      } else {
-        console.log('❌ L’utilisateur a refusé l’installation');
-      }
-      deferredPrompt = null;
-    });
+  document.getElementById('btn-install').addEventListener('click', () => {
+    popup.remove();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log("✅ Installation acceptée");
+        } else {
+          console.log("❌ Installation refusée");
+        }
+        deferredPrompt = null;
+      });
+    }
   });
+
+  document.getElementById('btn-fermer').addEventListener('click', () => {
+    popup.remove();
+  });
+}
+
+// Événement déclenché si installation est possible
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallPopup(); // Montre automatiquement le popup personnalisé
 });
 
-// Cacher le bouton si l'app est déjà installée
+// Détection si l'app est déjà installée
 window.addEventListener('appinstalled', () => {
-  console.log("✅ App déjà installée");
-  installBtn.style.display = 'none';
+  console.log("✅ L'app est installée");
+  deferredPrompt = null;
 });
+
