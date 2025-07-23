@@ -96,11 +96,8 @@
       });
     }
     
-    const navContainer = document.getElementById('section-nav');
-  if (!navContainer) {
-    console.error('Erreur : élément #section-nav introuvable dans le DOM');
-    return;
-  }
+    function createSectionButtons(sections) {
+  const navContainer = document.getElementById('section-nav');
   navContainer.innerHTML = '';
   
   sections.forEach(section => {
