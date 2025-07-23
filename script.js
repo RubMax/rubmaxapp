@@ -731,23 +731,25 @@ let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'inline-block';
+  e.preventDefault();           // Empêche l'affichage automatique
+  deferredPrompt = e;           // Stocke l'événement
+  installBtn.style.display = 'block'; // Affiche ton bouton manuel
+});
 
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
+installBtn.addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt(); // ✨ Affiche la bannière
     deferredPrompt.userChoice.then(choice => {
       if (choice.outcome === 'accepted') {
-        console.log('Installation acceptée');
+        console.log("Installation acceptée ✅");
       } else {
-        console.log('Installation refusée');
+        console.log("Installation refusée ❌");
       }
       deferredPrompt = null;
     });
-  });
+  }
 });
+
 
 // Vérifie si l'app est déjà installée
 window.addEventListener('appinstalled', () => {
