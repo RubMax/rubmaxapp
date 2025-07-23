@@ -729,7 +729,22 @@ if ('serviceWorker' in navigator) {
 
 let deferredPrompt;
 
-// Affiche un popup personnalisé (ex : modal, bannière...)
+// Vérifie si l'app est déjà installée (mode standalone)
+const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+// Ne rien faire si l'app est déjà installée
+if (!isAppInstalled) {
+  // Événement déclenché uniquement si installation est possible
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();             // Bloque la bannière par défaut
+    deferredPrompt = e;             // Stocke l’événement
+    showInstallPopup();             // Affiche ton popup personnalisé
+  });
+} else {
+  console.log("✅ L'app est déjà installée, aucun popup affiché.");
+}
+
+// Affiche un popup personnalisé (modal, bannière, etc.)
 function showInstallPopup() {
   const popup = document.createElement('div');
   popup.style.position = 'fixed';
@@ -742,10 +757,11 @@ function showInstallPopup() {
   popup.style.borderRadius = '10px';
   popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
   popup.style.zIndex = '10000';
+  popup.style.fontFamily = 'sans-serif';
   popup.innerHTML = `
-    <p>👉 Toque em “Instalar” para adicionar o aplicativo à sua tela inicial.</p>
-    <button id="btn-install">📲 Sim, instale</button>
-    <button id="btn-fermer">❌ Não, obrigado</button>
+    <p>Souhaitez-vous installer cette application sur votre appareil ?</p>
+    <button id="btn-install">📲 Oui, installer</button>
+    <button id="btn-fermer">❌ Non merci</button>
   `;
   document.body.appendChild(popup);
 
@@ -769,16 +785,8 @@ function showInstallPopup() {
   });
 }
 
-// Événement déclenché si installation est possible
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  showInstallPopup(); // Montre automatiquement le popup personnalisé
-});
-
-// Détection si l'app est déjà installée
+// En option : log quand l'app est installée
 window.addEventListener('appinstalled', () => {
-  console.log("✅ L'app est installée");
+  console.log("📱 L'application a été installée");
   deferredPrompt = null;
 });
-
