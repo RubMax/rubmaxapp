@@ -730,29 +730,34 @@ if ('serviceWorker' in navigator) {
 let deferredPrompt;
 const installBtn = document.getElementById('installBtn');
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();           // Empêche l'affichage automatique
-  deferredPrompt = e;           // Stocke l'événement
-  installBtn.style.display = 'block'; // Affiche ton bouton manuel
-});
+// Cacher le bouton par défaut
+installBtn.style.display = 'none';
 
-installBtn.addEventListener('click', () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt(); // ✨ Affiche la bannière
-    deferredPrompt.userChoice.then(choice => {
-      if (choice.outcome === 'accepted') {
-        console.log("Installation acceptée ✅");
+// Détecter l'événement beforeinstallprompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();          // Empêche le comportement auto
+  deferredPrompt = e;          // Stocke l'événement
+
+  // Affiche le bouton seulement si l'app n'est pas installée
+  installBtn.style.display = 'inline-block';
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none'; // Masquer le bouton
+    deferredPrompt.prompt(); // Affiche la bannière
+
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('✅ L’utilisateur a accepté l’installation');
       } else {
-        console.log("Installation refusée ❌");
+        console.log('❌ L’utilisateur a refusé l’installation');
       }
       deferredPrompt = null;
     });
-  }
+  });
 });
 
-
-// Vérifie si l'app est déjà installée
+// Cacher le bouton si l'app est déjà installée
 window.addEventListener('appinstalled', () => {
-  console.log('App installée');
+  console.log("✅ App déjà installée");
   installBtn.style.display = 'none';
 });
