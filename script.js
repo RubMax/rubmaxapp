@@ -447,8 +447,9 @@ ${(() => {
     
     /* Fonctions pour la galerie d'images */
   function showPopup(imageUrl, nom, description, prix, tailles, code, hideWhatsappButton = false) {
-  // Stocker toutes les images
-  imageUrls = imageUrl.split(',').map(url => url.trim());
+  // Supprimer la première image de la galerie
+  imageUrls = imageUrl.split(',').map(url => url.trim()).slice(1); // 👈 ici
+  
   currentImageIndex = 0;
   document.getElementById("popup").style.display = "flex";
 
