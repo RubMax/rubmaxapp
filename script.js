@@ -718,3 +718,39 @@ ${(() => {
        document.getElementById("popup").style.display = "none";
     }
 
+// Enregistrement du Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log("Service Worker enregistré", reg))
+      .catch(err => console.error("Erreur SW :", err));
+  });
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'inline-block';
+
+  installBtn.addEventListener('click', () => {
+    installBtn.style.display = 'none';
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      if (choice.outcome === 'accepted') {
+        console.log('Installation acceptée');
+      } else {
+        console.log('Installation refusée');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+
+// Vérifie si l'app est déjà installée
+window.addEventListener('appinstalled', () => {
+  console.log('App installée');
+  installBtn.style.display = 'none';
+});

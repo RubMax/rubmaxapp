@@ -414,13 +414,13 @@
 
     .popup h4 {
       color: #007bff;
-      font-size: 2rem;
-      margin-bottom: 1rem;
+      font-size: 1rem;
+      margin-bottom: ;
     }
 
     .popup p {
       font-size: 1.1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     .popup-image {
   max-width: 100%;
