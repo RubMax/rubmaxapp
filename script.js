@@ -743,9 +743,9 @@ function showInstallPopup() {
   popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
   popup.style.zIndex = '10000';
   popup.innerHTML = `
-    <p>Souhaitez-vous installer cette application sur votre appareil ?</p>
-    <button id="btn-install">📲 Oui, installer</button>
-    <button id="btn-fermer">❌ Non merci</button>
+    <p>👉 Toque em “Instalar” para adicionar o aplicativo à sua tela inicial.</p>
+    <button id="btn-install">📲 Sim, instale</button>
+    <button id="btn-fermer">❌ Não, obrigado</button>
   `;
   document.body.appendChild(popup);
 
