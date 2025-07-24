@@ -742,7 +742,7 @@ if (!isAppInstalled) {
     showInstallPopup();             // Affiche ton popup personnalisé
   });
 } else {
-  console.log("✅ L'app est déjà installée, aucun popup affiché.");
+  console.log("✅ O aplicativo já está instalado, nenhum pop-up é exibido.");
 }
 
 // Affiche un popup personnalisé (modal, bannière, etc.)
@@ -760,9 +760,9 @@ function showInstallPopup() {
   popup.style.zIndex = '10000';
   popup.style.fontFamily = 'sans-serif';
   popup.innerHTML = `
-    <p>Souhaitez-vous installer cette application sur votre appareil ?</p>
-    <button id="btn-install">📲 Oui, installer</button>
-    <button id="btn-fermer">❌ Non merci</button>
+    <p>Gostaria de instalar este aplicativo no seu dispositivo?</p>
+    <button id="btn-install">📲 Sim, instale</button>
+    <button id="btn-fermer">❌ Não, obrigado</button>
   `;
   document.body.appendChild(popup);
 
@@ -772,9 +772,9 @@ function showInstallPopup() {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log("✅ Installation acceptée");
+          console.log("✅ Instalação aceita");
         } else {
-          console.log("❌ Installation refusée");
+          console.log("❌ Instalação recusada");
         }
         deferredPrompt = null;
       });
@@ -788,6 +788,6 @@ function showInstallPopup() {
 
 // En option : log quand l'app est installée
 window.addEventListener('appinstalled', () => {
-  console.log("📱 L'application a été installée");
+  console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
