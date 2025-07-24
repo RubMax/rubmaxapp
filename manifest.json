@@ -1,6 +1,6 @@
 {
-  "name": "Mon Application PWA",
-  "short_name": "MonApp",
+  "name": "RubMax Servicos App",
+  "short_name": "RubMaxApp",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
