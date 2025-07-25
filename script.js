@@ -157,10 +157,14 @@ function scrollToSection(sectionId) {
   const firstSectionId = allTitles[0]?.id;
 
   if (sectionId === firstSectionId) {
-    // Si on clique sur le premier bouton, afficher toutes les sections
+    // Afficher toutes les sections si c’est le premier bouton
     allTitles.forEach(title => title.style.display = 'block');
     allSections.forEach(section => section.style.display = 'block');
+
+    // Faire défiler en haut de la page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
+    // Afficher uniquement la section demandée
     allTitles.forEach(title => {
       title.style.display = (title.id === sectionId) ? 'block' : 'none';
     });
@@ -169,6 +173,12 @@ function scrollToSection(sectionId) {
       const sectionTitle = allTitles[i];
       section.style.display = (sectionTitle?.id === sectionId) ? 'block' : 'none';
     });
+
+    // Faire défiler jusqu'à la section sélectionnée
+    const targetTitle = document.getElementById(sectionId);
+    if (targetTitle) {
+      targetTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }
 
