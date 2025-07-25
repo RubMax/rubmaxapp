@@ -893,11 +893,3 @@
   box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);
 }
 
-
-.noticia-card {
-  background: #f0f0f0;
-  padding: 10px;
-  margin: 10px 0;
-  border-left: 4px solid #83addc;
-  font-style: italic;
-}
