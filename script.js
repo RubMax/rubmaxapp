@@ -753,7 +753,7 @@ function showInstallPopup() {
   popup.style.left = '20px';
   popup.style.right = '20px';
   popup.style.padding = '20px';
-  popup.style.background = '#fff';
+  popup.style.background = '#83addc';
   popup.style.border = '1px solid #ccc';
   popup.style.borderRadius = '10px';
   popup.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
