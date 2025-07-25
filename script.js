@@ -15,7 +15,6 @@
   .then(response => response.json())
   .then(data => {
     displayProduits(data);
-      renderNoticias(data.noticias);
   })
   .catch(error => {
     document.getElementById("produits").innerHTML =
@@ -44,39 +43,6 @@
     }, 2000);
 }
 
-function renderNoticias(noticias) {
-  if (!noticias || !Array.isArray(noticias)) return;
-
-  // Créer le bouton "Noticias" dans le menu
-  const nav = document.getElementById('section-nav');
-  const btn = document.createElement('button');
-  btn.textContent = 'Noticias';
-  btn.className = 'nav-btn';
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.section-container').forEach(e => e.style.display = 'none');
-    const newsSection = document.getElementById('section-noticias');
-    if (newsSection) newsSection.style.display = 'block';
-  });
-  nav.appendChild(btn);
-
-  // Créer la section actualités
-  const container = document.getElementById('main-content');
-  const section = document.createElement('div');
-  section.className = 'section-container';
-  section.id = 'section-noticias';
-
-  const title = document.createElement('h2');
-  title.textContent = 'Noticias';
-  section.appendChild(title);
-
-  noticias.forEach(n => {
-    const p = document.createElement('p');
-    p.textContent = n.titre;
-    section.appendChild(p);
-  });
-
-  container.appendChild(section);
-}
 
     function setupHorizontalDragScroll() {
       const container = document.getElementById('nav-container');
@@ -825,83 +791,3 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
-
-
-
-
-function renderSections(data) {
-  const { services, noticias } = data;
-
-  const container = document.getElementById('main-content');
-  const nav = document.getElementById('section-nav');
-  container.innerHTML = '';
-  nav.innerHTML = '';
-
-  const sectionsMap = new Map();
-
-  services.forEach(item => {
-    if (!sectionsMap.has(item.section)) {
-      sectionsMap.set(item.section, []);
-    }
-    sectionsMap.get(item.section).push(item);
-  });
-
-  // Créer les sections
-  sectionsMap.forEach((items, section) => {
-    // Bouton de menu
-    const btn = document.createElement('button');
-    btn.textContent = section;
-    btn.onclick = () => scrollToSection(section);
-    nav.appendChild(btn);
-
-    // Section HTML
-    const sectionTitle = document.createElement('h2');
-    sectionTitle.id = section;
-    sectionTitle.textContent = section;
-    sectionTitle.className = "section-title";
-
-    const sectionContainer = document.createElement('div');
-    sectionContainer.className = "section-container";
-
-    items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${item.image}" alt="${item.nom}">
-        <h3>${item.nom}</h3>
-        <p>${item.description}</p>
-        <p class="price">${item.prix ? 'R$ ' + item.prix : ''}</p>
-      `;
-      sectionContainer.appendChild(card);
-    });
-
-    container.appendChild(sectionTitle);
-    container.appendChild(sectionContainer);
-  });
-
-  // 🔴 Ajouter la section NOTICIAS
-  if (noticias && noticias.length > 0) {
-    const noticiasBtn = document.createElement('button');
-    noticiasBtn.textContent = "Noticias";
-    noticiasBtn.onclick = () => scrollToSection("Noticias");
-    nav.appendChild(noticiasBtn);
-
-    const noticiasTitle = document.createElement('h2');
-    noticiasTitle.id = "Noticias";
-    noticiasTitle.textContent = "Noticias";
-    noticiasTitle.className = "section-title";
-
-    const noticiasContainer = document.createElement('div');
-    noticiasContainer.className = "section-container";
-
-    noticias.forEach(item => {
-      const newsCard = document.createElement('div');
-      newsCard.className = 'noticia-card';
-      newsCard.innerHTML = `<p>${item.texte}</p>`;
-      noticiasContainer.appendChild(newsCard);
-    });
-
-    container.appendChild(noticiasTitle);
-    container.appendChild(noticiasContainer);
-  }
-}
