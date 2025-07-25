@@ -44,6 +44,39 @@
     }, 2000);
 }
 
+function renderNoticias(noticias) {
+  if (!noticias || !Array.isArray(noticias)) return;
+
+  // Créer le bouton "Noticias" dans le menu
+  const nav = document.getElementById('section-nav');
+  const btn = document.createElement('button');
+  btn.textContent = 'Noticias';
+  btn.className = 'nav-btn';
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.section-container').forEach(e => e.style.display = 'none');
+    const newsSection = document.getElementById('section-noticias');
+    if (newsSection) newsSection.style.display = 'block';
+  });
+  nav.appendChild(btn);
+
+  // Créer la section actualités
+  const container = document.getElementById('main-content');
+  const section = document.createElement('div');
+  section.className = 'section-container';
+  section.id = 'section-noticias';
+
+  const title = document.createElement('h2');
+  title.textContent = 'Noticias';
+  section.appendChild(title);
+
+  noticias.forEach(n => {
+    const p = document.createElement('p');
+    p.textContent = n.titre;
+    section.appendChild(p);
+  });
+
+  container.appendChild(section);
+}
 
     function setupHorizontalDragScroll() {
       const container = document.getElementById('nav-container');
