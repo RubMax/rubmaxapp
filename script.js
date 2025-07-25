@@ -15,6 +15,8 @@
   .then(response => response.json())
   .then(data => {
     displayProduits(data);
+      loadNotificacoes(); // ici on charge la section notifications
+      
   })
   .catch(error => {
     document.getElementById("produits").innerHTML =
@@ -791,3 +793,36 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
+
+function loadNotificacoes() {
+  fetch('https://script.google.com/macros/s/TON_URL/exec?page=notificacoes')
+    .then(res => res.json())
+    .then(data => {
+      if (!Array.isArray(data) || data.length === 0) return;
+
+      const section = document.createElement('section');
+      section.id = "notificacoes-section";
+      section.className = "section-container";
+
+      const title = document.createElement('h2');
+      title.textContent = "Notificações do Local";
+
+      const list = document.createElement('ul');
+      list.className = "notificacoes-list";
+
+      data.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+
+      section.appendChild(title);
+      section.appendChild(list);
+
+      document.getElementById('main-content').appendChild(section);
+    })
+    .catch(error => {
+      console.error("Erreur lors du chargement des notifications :", error);
+    });
+}
+
