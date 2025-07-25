@@ -791,3 +791,83 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
+
+
+
+
+function renderSections(data) {
+  const { services, noticias } = data;
+
+  const container = document.getElementById('main-content');
+  const nav = document.getElementById('section-nav');
+  container.innerHTML = '';
+  nav.innerHTML = '';
+
+  const sectionsMap = new Map();
+
+  services.forEach(item => {
+    if (!sectionsMap.has(item.section)) {
+      sectionsMap.set(item.section, []);
+    }
+    sectionsMap.get(item.section).push(item);
+  });
+
+  // Créer les sections
+  sectionsMap.forEach((items, section) => {
+    // Bouton de menu
+    const btn = document.createElement('button');
+    btn.textContent = section;
+    btn.onclick = () => scrollToSection(section);
+    nav.appendChild(btn);
+
+    // Section HTML
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.id = section;
+    sectionTitle.textContent = section;
+    sectionTitle.className = "section-title";
+
+    const sectionContainer = document.createElement('div');
+    sectionContainer.className = "section-container";
+
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.nom}">
+        <h3>${item.nom}</h3>
+        <p>${item.description}</p>
+        <p class="price">${item.prix ? 'R$ ' + item.prix : ''}</p>
+      `;
+      sectionContainer.appendChild(card);
+    });
+
+    container.appendChild(sectionTitle);
+    container.appendChild(sectionContainer);
+  });
+
+  // 🔴 Ajouter la section NOTICIAS
+  if (noticias && noticias.length > 0) {
+    const noticiasBtn = document.createElement('button');
+    noticiasBtn.textContent = "Noticias";
+    noticiasBtn.onclick = () => scrollToSection("Noticias");
+    nav.appendChild(noticiasBtn);
+
+    const noticiasTitle = document.createElement('h2');
+    noticiasTitle.id = "Noticias";
+    noticiasTitle.textContent = "Noticias";
+    noticiasTitle.className = "section-title";
+
+    const noticiasContainer = document.createElement('div');
+    noticiasContainer.className = "section-container";
+
+    noticias.forEach(item => {
+      const newsCard = document.createElement('div');
+      newsCard.className = 'noticia-card';
+      newsCard.innerHTML = `<p>${item.texte}</p>`;
+      noticiasContainer.appendChild(newsCard);
+    });
+
+    container.appendChild(noticiasTitle);
+    container.appendChild(noticiasContainer);
+  }
+}
