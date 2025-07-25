@@ -1,5 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   loadData(); // ou google.script.run.getData(renderSections);
+  google.script.run
+  .withSuccessHandler(renderSections)
+  .withFailureHandler(error => {
+    console.error("Erreur Apps Script:", error.message);
+    alert("Erreur lors du chargement des données.");
+  })
+  .getData();
+
 });
 
 function renderSections(data) {
