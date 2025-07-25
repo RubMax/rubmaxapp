@@ -157,27 +157,29 @@ function scrollToSection(sectionId) {
   const firstSectionId = allTitles[0]?.id;
 
   if (sectionId === firstSectionId) {
-    // Afficher toutes les sections si c’est le premier bouton
+    // Affiche toutes les sections
     allTitles.forEach(title => title.style.display = 'block');
     allSections.forEach(section => section.style.display = 'block');
 
-    // Faire défiler en haut de la page
+    // Défile tout en haut de la page
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
-    // Afficher uniquement la section demandée
+    // Masque toutes les sections sauf celle sélectionnée
     allTitles.forEach(title => {
       title.style.display = (title.id === sectionId) ? 'block' : 'none';
     });
 
     allSections.forEach((section, i) => {
-      const sectionTitle = allTitles[i];
-      section.style.display = (sectionTitle?.id === sectionId) ? 'block' : 'none';
+      const title = allTitles[i];
+      section.style.display = (title.id === sectionId) ? 'block' : 'none';
     });
 
-    // Faire défiler jusqu'à la section sélectionnée
-    const targetTitle = document.getElementById(sectionId);
-    if (targetTitle) {
-      targetTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Forcer le défilement vers le titre de la section visible
+    const selectedTitle = document.getElementById(sectionId);
+    if (selectedTitle) {
+      setTimeout(() => {
+        selectedTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50); // petit délai pour s'assurer que l'affichage est prêt
     }
   }
 }
