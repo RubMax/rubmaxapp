@@ -10,6 +10,10 @@
     let imageUrls = [];
     
     document.addEventListener('DOMContentLoaded', function() {
+        const socialLinks = document.querySelector('.social-links');
+    const pedDePage = document.getElementById('ped de page');
+ if (socialLinks) socialLinks.remove();
+    if (pedDePage) pedDePage.remove();
       // Chargement des données
      fetch("https://script.google.com/macros/s/AKfycbwoTyj8mpGYPfWCOxszGA-SPYTSBsJbJoHyFKgIr-b5xSAu-CO9pgE3bCebLGAWCVDnPg/exec?page=api")
   .then(response => response.json())
