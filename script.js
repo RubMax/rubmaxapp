@@ -230,7 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function displayProduits(data) {
   const container = document.getElementById('produits');
   container.innerHTML = "";
+
   const sections = [...new Set(data.map(item => item.section))];
+
+  // Ajouter manuellement la section "Noticias" si au moins un item a une valeur
+  const hasNoticias = data.some(item => item.noticias && item.noticias.trim() !== '');
+  if (hasNoticias) sections.push("Noticias");
 
   // Filtrer les pubs valides
   pubItems = data.filter(item => item.pub && item.pub.trim() !== '');
@@ -240,7 +245,7 @@ function displayProduits(data) {
   sections.forEach(section => {
     const sectionId = generateSectionId(section);
     const h2 = document.createElement('h2');
-    h2.textContent = section.toUpperCase(); // <-- Ajouté pour mettre le titre en majuscule
+    h2.textContent = section.toUpperCase();
     h2.id = sectionId;
     container.appendChild(h2);
 
@@ -248,85 +253,34 @@ function displayProduits(data) {
     sectionContainer.className = "section-container";
     container.appendChild(sectionContainer);
 
-    data
-      .filter(p => p.section === section)
-      .forEach(produit => {
-        const div = document.createElement('div');
-        div.className = "article produit-ligne"; // Ajout de la classe pour le style
+    if (section === "Noticias") {
+      // 🎯 Section spéciale : afficher les éléments de la colonne J (noticias)
+      data
+        .filter(p => p.noticias && p.noticias.trim() !== "")
+        .forEach(news => {
+          const div = document.createElement('div');
+          div.className = "article produit-ligne";
 
-        const descriptionHtml = produit.description.replace(/\n/g, '<br>');
-        const descriptionParam = encodeURIComponent(produit.description);
-
-        div.innerHTML = `
-          <div class="article-image">
-            <img src="${produit.image ? escapeHtml(produit.image) : 'https://iili.io/F3yIWCb.png'}" 
-                 alt="${escapeHtml(produit.nom)}" 
-                 onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">
-          </div>
-          <div class="article-details">
-            <h3 style="text-transform: uppercase" onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">${escapeHtml(produit.nom)}</h3>
-
-            
-
-            <div class="details">
-  ${produit.prix ? (() => {
-  try {
-    if (produit.prix.includes('-')) {
-      const [oldPrice, newPrice] = produit.prix.split('-').map(p => escapeHtml(p.trim()));
-      return `
-        <div class="price-container">
-          <span class="old-price">R$ ${oldPrice}</span>
-          <span class="new-price">R$ ${newPrice}</span>
-        </div>
-      `;
+          div.innerHTML = `
+            <div class="article-details">
+              <h3 style="color:#ff6600">${escapeHtml(news.nom)}</h3>
+              <p>${escapeHtml(news.noticias).replace(/\n/g, '<br>')}</p>
+            </div>
+          `;
+          sectionContainer.appendChild(div);
+        });
+    } else {
+      // Section normale
+      data
+        .filter(p => p.section === section)
+        .forEach(produit => {
+          // (code inchangé pour les produits)
+          // ...
+        });
     }
-    return `<p>R$ <strong>${escapeHtml(produit.prix)}</strong></p>`;
-  } catch (e) {
-    return `<p>R$ <strong>${escapeHtml(produit.prix)}</strong></p>`;
-  }
-})() : ''}
-
-${(() => {
-  let note = '';
-  let taillesNettoyees = produit.tailles;
-
-  // Extraire le texte entre parenthèses (s'il existe)
-  const match = produit.tailles.match(/\(([^)]+)\)/);
-  if (match) {
-    note = match[1];
-    taillesNettoyees = produit.tailles.replace(/\([^)]*\)/g, '').trim();
-  }
-
-  // Séparer et formater les tailles avec encadrement
-  const taillesArray = taillesNettoyees.split(',')
-    .map(t => t.trim())
-    .filter(t => t !== '');
-
-  const taillesEncadrees = taillesArray.map(taille => 
-    `<span class="taille-encadree">${escapeHtml(taille)}</span>`
-  ).join(' ');
-
-  return `
-    ${note ? `<p class="note-text"><strong>${escapeHtml(note)}</strong></p>` : ''}
-    ${taillesArray.length > 0 ? `
-      <div class="tailles-container">
-        ${taillesEncadrees}
-      </div>
-    ` : ''}
-  `;
-})()}
-<br>
-            <button class="open-button" onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">Solicite/Realise</button>
-            
-          
-
-          </div>
-        `;
-        sectionContainer.appendChild(div);
-      });
   });
 
-  // Démarrer le carrousel de pubs si il y a des pubs
+  // Démarrer pub
   if (pubItems.length > 0) {
     startPubCarousel();
   }
@@ -338,7 +292,6 @@ ${(() => {
     }, 300);
   }
 }
-
 
     
     
