@@ -783,3 +783,74 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
+
+function renderSections(data) {
+  const container = document.getElementById('main-content');
+  const nav = document.getElementById('section-nav');
+  container.innerHTML = '';
+  nav.innerHTML = '';
+
+  const sections = {};
+
+  data.forEach(item => {
+    const section = item.type;
+    if (!sections[section]) {
+      sections[section] = [];
+    }
+    sections[section].push(item);
+  });
+
+  Object.keys(sections).forEach((sectionName, index) => {
+    const title = document.createElement('h2');
+    title.textContent = sectionName;
+    title.id = `section-${index}`;
+    title.style.display = 'block';
+
+    const sectionContainer = document.createElement('div');
+    sectionContainer.className = 'section-container';
+    sectionContainer.style.display = 'block';
+
+    // Ajout bouton navigation
+    const navBtn = document.createElement('button');
+    navBtn.textContent = sectionName;
+    navBtn.addEventListener('click', () => scrollToSection(title.id));
+    nav.appendChild(navBtn);
+
+    // Ajouter les cartes de produits
+    sections[sectionName].forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      if (sectionName.toLowerCase() === 'noticias') {
+        // 🔔 Pour la section "Noticias", afficher uniquement la colonne F (ex: prix)
+        const info = document.createElement('p');
+        info.textContent = item.prix || '';
+        card.appendChild(info);
+      } else {
+        // 💡 Pour toutes les autres sections, afficher l'image, nom, description, prix
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.nom;
+
+        const name = document.createElement('h3');
+        name.textContent = item.nom;
+
+        const desc = document.createElement('p');
+        desc.textContent = item.description;
+
+        const price = document.createElement('p');
+        price.textContent = item.prix;
+
+        card.appendChild(img);
+        card.appendChild(name);
+        card.appendChild(desc);
+        card.appendChild(price);
+      }
+
+      sectionContainer.appendChild(card);
+    });
+
+    container.appendChild(title);
+    container.appendChild(sectionContainer);
+  });
+}
