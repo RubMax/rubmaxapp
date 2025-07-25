@@ -15,6 +15,7 @@
   .then(response => response.json())
   .then(data => {
     displayProduits(data);
+      renderNoticias(data.noticias);
   })
   .catch(error => {
     document.getElementById("produits").innerHTML =
