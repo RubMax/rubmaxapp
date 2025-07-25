@@ -892,27 +892,3 @@
 #sizes-container.shake {
   box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);
 }
-#notificacoes-section {
-  margin-top: 40px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-#notificacoes-section h2 {
-  font-size: 1.5em;
-  margin-bottom: 16px;
-  color: #333;
-}
-
-.notificacoes-list {
-  list-style-type: disc;
-  padding-left: 20px;
-}
-
-.notificacoes-list li {
-  margin-bottom: 8px;
-  font-size: 1.1em;
-  color: #444;
-}
