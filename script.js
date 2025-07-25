@@ -149,24 +149,36 @@ function generateSectionId(sectionName) {
 function scrollToSection(sectionId) {
   const allSections = document.querySelectorAll('.section-container');
   const allTitles = document.querySelectorAll('h2');
-
   const firstSectionId = allTitles[0]?.id;
 
   if (sectionId === firstSectionId) {
-    // Si on clique sur le premier bouton, afficher toutes les sections
-    allTitles.forEach(title => title.style.display = 'block');
-    allSections.forEach(section => section.style.display = 'block');
+    // Affiche toutes les sections avec animation
+    allTitles.forEach(title => {
+      title.classList.add('visible');
+    });
+    allSections.forEach(section => {
+      section.classList.add('visible');
+    });
   } else {
     allTitles.forEach(title => {
-      title.style.display = (title.id === sectionId) ? 'block' : 'none';
+      if (title.id === sectionId) {
+        title.classList.add('visible');
+      } else {
+        title.classList.remove('visible');
+      }
     });
 
     allSections.forEach((section, i) => {
       const sectionTitle = allTitles[i];
-      section.style.display = (sectionTitle?.id === sectionId) ? 'block' : 'none';
+      if (sectionTitle?.id === sectionId) {
+        section.classList.add('visible');
+      } else {
+        section.classList.remove('visible');
+      }
     });
   }
 }
+
 
 
 function handleScroll() {
