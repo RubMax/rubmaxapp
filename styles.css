@@ -892,4 +892,8 @@
 #sizes-container.shake {
   box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);
 }
+#ped\ de\ page,
+.social-links {
+  display: none !important;
+}
 
