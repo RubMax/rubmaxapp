@@ -339,40 +339,7 @@ ${(() => {
   }
 }
 
-function displayNoticias(data) {
-  const container = document.getElementById('main-content');
-  container.innerHTML = ''; // Vider le contenu actuel
-
-  // Filtrer les éléments où la section est "Noticias"
-  const noticias = data.filter(item => item.section?.toLowerCase() === 'noticias');
-
-  // Créer une section pour les Noticias
-  if (noticias.length > 0) {
-    const section = document.createElement('section');
-    section.className = 'noticias-section';
-
-    const title = document.createElement('h2');
-    title.textContent = 'Noticias';
-    section.appendChild(title);
-
-    // Ajouter chaque annonce (description colonne D)
-    noticias.forEach(item => {
-      const article = document.createElement('article');
-      article.className = 'noticia';
-
-      const description = document.createElement('p');
-      description.textContent = item.description; // Colonne D
-
-      article.appendChild(description);
-      section.appendChild(article);
-    });
-
-    container.appendChild(section);
-  } else {
-    container.innerHTML = '<p>Aucune actualité disponible.</p>';
-  }
-}
- 
+    
     
      function startPubCarousel() {
       if (pubItems.length === 0) return;
