@@ -10,10 +10,6 @@
     let imageUrls = [];
     
     document.addEventListener('DOMContentLoaded', function() {
-        const socialLinks = document.querySelector('.social-links');
-    const pedDePage = document.getElementById('ped de page');
- if (socialLinks) socialLinks.remove();
-    if (pedDePage) pedDePage.remove();
       // Chargement des données
      fetch("https://script.google.com/macros/s/AKfycbwoTyj8mpGYPfWCOxszGA-SPYTSBsJbJoHyFKgIr-b5xSAu-CO9pgE3bCebLGAWCVDnPg/exec?page=api")
   .then(response => response.json())
@@ -154,42 +150,54 @@ function scrollToSection(sectionId) {
   const allSections = document.querySelectorAll('.section-container');
   const allTitles = document.querySelectorAll('h2');
 
-  const firstSectionId = allTitles[0]?.id;
+  const firstTitle = allTitles[0];
+  const firstContainer = firstTitle?.nextElementSibling;
+  const firstSectionId = firstTitle?.id;
 
   if (sectionId === firstSectionId) {
-    // Affiche toutes les sections
+    // Si on clique sur la première section, afficher tout
     allTitles.forEach(title => title.style.display = 'block');
-    allSections.forEach(section => {
-      section.style.display = 'block';
-      section.classList.remove('fade-in'); // réinitialiser l'effet
-    });
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    allSections.forEach(section => section.style.display = 'block');
   } else {
-    allTitles.forEach(title => {
-      title.style.display = (title.id === sectionId) ? 'block' : 'none';
-    });
-
-    allSections.forEach((section, i) => {
-      const title = allTitles[i];
-      if (title.id === sectionId) {
-        section.style.display = 'block';
-        section.classList.remove('fade-in'); // au cas où
-        void section.offsetWidth; // force reflow pour réinitialiser l'animation
-        section.classList.add('fade-in');
+    allTitles.forEach((title, i) => {
+      if (i === 0) {
+        title.style.display = 'block'; // garder la première visible
       } else {
-        section.style.display = 'none';
-        section.classList.remove('fade-in');
+        title.style.display = (title.id === sectionId) ? 'block' : 'none';
       }
     });
 
-    const selectedTitle = document.getElementById(sectionId);
-    if (selectedTitle) {
-      setTimeout(() => {
-        selectedTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
-    }
+    allSections.forEach((section, i) => {
+      if (i === 0) {
+        section.style.display = 'block'; // garder le premier contenu visible
+      } else {
+        const sectionTitle = allTitles[i];
+        section.style.display = (sectionTitle?.id === sectionId) ? 'block' : 'none';
+      }
+    });
   }
+
+  // Scroll vers la section cible
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    const headerHeight = document.querySelector('.fixed-header')?.offsetHeight || 0;
+    const sectionPosition = targetSection.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = sectionPosition - headerHeight - 10;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+
+  // Mise à jour des boutons
+  document.querySelectorAll('.section-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  document.querySelector(`.section-btn[href="#${sectionId}"]`)?.classList.add('active');
+
+  // Mise à jour de l’URL
+  history.pushState(null, null, `#${sectionId}`);
 }
 
 
@@ -783,4 +791,3 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
-

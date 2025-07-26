@@ -892,22 +892,4 @@
 #sizes-container.shake {
   box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);
 }
-#ped\ de\ page,
-.social-links {
-  display: none !important;
-}
 
-.fade-in {
-  animation: fadeIn 0.6s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
