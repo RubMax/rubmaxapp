@@ -894,16 +894,21 @@
   box-shadow: 0 0 1px rgba(255, 0, 0, 0.5);
 }
 
-.noticias-content {
-  text-align: center;
-  font-size: 1.2em;
-  padding: 15px;
-  width: 100%;
-  box-sizing: border-box;
-}
+
 
 .article.produit-ligne {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.noticias-content {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 20px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
