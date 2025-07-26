@@ -159,35 +159,27 @@ function scrollToSection(sectionId) {
   if (sectionId === firstSectionId) {
     // Affiche toutes les sections
     allTitles.forEach(title => title.style.display = 'block');
-    allSections.forEach(section => {
-      section.style.display = 'block';
-      section.classList.remove('fade-in'); // réinitialiser l'effet
-    });
+    allSections.forEach(section => section.style.display = 'block');
 
+    // Défile tout en haut de la page
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
+    // Masque toutes les sections sauf celle sélectionnée
     allTitles.forEach(title => {
       title.style.display = (title.id === sectionId) ? 'block' : 'none';
     });
 
     allSections.forEach((section, i) => {
       const title = allTitles[i];
-      if (title.id === sectionId) {
-        section.style.display = 'block';
-        section.classList.remove('fade-in'); // au cas où
-        void section.offsetWidth; // force reflow pour réinitialiser l'animation
-        section.classList.add('fade-in');
-      } else {
-        section.style.display = 'none';
-        section.classList.remove('fade-in');
-      }
+      section.style.display = (title.id === sectionId) ? 'block' : 'none';
     });
 
+    // Forcer le défilement vers le titre de la section visible
     const selectedTitle = document.getElementById(sectionId);
     if (selectedTitle) {
       setTimeout(() => {
         selectedTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
+      }, 50); // petit délai pour s'assurer que l'affichage est prêt
     }
   }
 }
@@ -783,4 +775,3 @@ window.addEventListener('appinstalled', () => {
   console.log("📱 O aplicativo foi instalado");
   deferredPrompt = null;
 });
-
