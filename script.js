@@ -224,7 +224,7 @@ function displayProduits(data) {
   sections.forEach(section => {
     const sectionId = generateSectionId(section);
     const h2 = document.createElement('h2');
-    h2.textContent = section.toUpperCase(); // <-- Ajouté pour mettre le titre en majuscule
+    h2.textContent = section.toUpperCase();
     h2.id = sectionId;
     container.appendChild(h2);
 
@@ -235,9 +235,25 @@ function displayProduits(data) {
     data
       .filter(p => p.section === section)
       .forEach(produit => {
+        // VÉRIFIER SI C'EST LA SECTION "NOTICIAS"
+        const isNoticias = section.toUpperCase() === "NOTICIAS" || section.toUpperCase() === "NOTOCIA";
+        
         const div = document.createElement('div');
         div.className = "article produit-ligne"; // Ajout de la classe pour le style
 
+        // FORMAT SPÉCIAL POUR NOTICIAS
+        if (isNoticias) {
+          const descriptionHtml = escapeHtml(produit.description).replace(/\n/g, '<br>');
+          div.innerHTML = `
+            <div class="noticias-content">
+              ${descriptionHtml}
+            </div>
+          `;
+          sectionContainer.appendChild(div);
+          return; // Passer au produit suivant
+        }
+
+        // FORMAT NORMAL POUR LES AUTRES SECTIONS
         const descriptionHtml = produit.description.replace(/\n/g, '<br>');
         const descriptionParam = encodeURIComponent(produit.description);
 
@@ -322,7 +338,6 @@ ${(() => {
     }, 300);
   }
 }
-
 
     
     
