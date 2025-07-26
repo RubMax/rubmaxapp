@@ -220,61 +220,115 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
 function displayProduits(data) {
-  const container = document.getElementById('main-content');
+  const container = document.getElementById('produits');
+  container.innerHTML = "";
+  const sections = [...new Set(data.map(item => item.section))];
 
-  // Extraire les types uniques (sections)
-  const sections = [...new Set(data.map(item => item.type))];
+  // Filtrer les pubs valides
+  pubItems = data.filter(item => item.pub && item.pub.trim() !== '');
+
   createSectionButtons(sections);
 
-  // Trouver le nom de la dernière section (ex: 'Noticias')
-  const lastSectionName = sections[sections.length - 1];
-
   sections.forEach(section => {
-    // Créer le titre
     const sectionId = generateSectionId(section);
-    const title = document.createElement('h2');
-    title.id = sectionId;
-    title.textContent = section;
-    container.appendChild(title);
+    const h2 = document.createElement('h2');
+    h2.textContent = section.toUpperCase(); // <-- Ajouté pour mettre le titre en majuscule
+    h2.id = sectionId;
+    container.appendChild(h2);
 
-    // Créer le conteneur des produits
     const sectionContainer = document.createElement('div');
-    sectionContainer.className = 'section-container';
+    sectionContainer.className = "section-container";
     container.appendChild(sectionContainer);
 
-    // Filtrer les produits de cette section
-    const produits = data.filter(item => item.type === section);
+    data
+      .filter(p => p.section === section)
+      .forEach(produit => {
+        const div = document.createElement('div');
+        div.className = "article produit-ligne"; // Ajout de la classe pour le style
 
-    produits.forEach(produit => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
+        const descriptionHtml = produit.description.replace(/\n/g, '<br>');
+        const descriptionParam = encodeURIComponent(produit.description);
 
-      const isLastSection = (section === lastSectionName);
+        div.innerHTML = `
+          <div class="article-image">
+            <img src="${produit.image ? escapeHtml(produit.image) : 'https://iili.io/F3yIWCb.png'}" 
+                 alt="${escapeHtml(produit.nom)}" 
+                 onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">
+          </div>
+          <div class="article-details">
+            <h3 style="text-transform: uppercase" onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">${escapeHtml(produit.nom)}</h3>
 
-      // Construction dynamique du HTML selon la section
-      let html = `
-        <h3>${escapeHtml(produit.nom)}</h3>
-        <p>${escapeHtml(produit.description)}</p>
+            
+
+            <div class="details">
+  ${produit.prix ? (() => {
+  try {
+    if (produit.prix.includes('-')) {
+      const [oldPrice, newPrice] = produit.prix.split('-').map(p => escapeHtml(p.trim()));
+      return `
+        <div class="price-container">
+          <span class="old-price">R$ ${oldPrice}</span>
+          <span class="new-price">R$ ${newPrice}</span>
+        </div>
       `;
+    }
+    return `<p>R$ <strong>${escapeHtml(produit.prix)}</strong></p>`;
+  } catch (e) {
+    return `<p>R$ <strong>${escapeHtml(produit.prix)}</strong></p>`;
+  }
+})() : ''}
 
-      // Ajouter l'image uniquement si ce n'est pas la dernière section
-      if (!isLastSection && produit.img) {
-        html += `<img src="${escapeHtml(produit.img)}" alt="${escapeHtml(produit.nom)}">`;
-      }
+${(() => {
+  let note = '';
+  let taillesNettoyees = produit.tailles;
 
-      // Ajouter le bouton uniquement si ce n'est pas la dernière section
-      if (!isLastSection) {
-        html += `
-          <button onclick="showPopup('${escapeHtml(produit.img)}', '${escapeHtml(produit.nom)}', '${encodeURIComponent(produit.description)}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">
-            Voir
-          </button>
+  // Extraire le texte entre parenthèses (s'il existe)
+  const match = produit.tailles.match(/\(([^)]+)\)/);
+  if (match) {
+    note = match[1];
+    taillesNettoyees = produit.tailles.replace(/\([^)]*\)/g, '').trim();
+  }
+
+  // Séparer et formater les tailles avec encadrement
+  const taillesArray = taillesNettoyees.split(',')
+    .map(t => t.trim())
+    .filter(t => t !== '');
+
+  const taillesEncadrees = taillesArray.map(taille => 
+    `<span class="taille-encadree">${escapeHtml(taille)}</span>`
+  ).join(' ');
+
+  return `
+    ${note ? `<p class="note-text"><strong>${escapeHtml(note)}</strong></p>` : ''}
+    ${taillesArray.length > 0 ? `
+      <div class="tailles-container">
+        ${taillesEncadrees}
+      </div>
+    ` : ''}
+  `;
+})()}
+<br>
+            <button class="open-button" onclick="showPopup('${escapeHtml(produit.image)}', '${escapeHtml(produit.nom)}', '${descriptionParam}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">Solicite/Realise</button>
+            
+          
+
+          </div>
         `;
-      }
-
-      card.innerHTML = html;
-      sectionContainer.appendChild(card);
-    });
+        sectionContainer.appendChild(div);
+      });
   });
+
+  // Démarrer le carrousel de pubs si il y a des pubs
+  if (pubItems.length > 0) {
+    startPubCarousel();
+  }
+
+  if (window.location.hash) {
+    const sectionId = window.location.hash.substring(1);
+    setTimeout(() => {
+      scrollToSection(sectionId);
+    }, 300);
+  }
 }
 
 
