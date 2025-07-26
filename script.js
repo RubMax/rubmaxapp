@@ -220,6 +220,63 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
 function displayProduits(data) {
+  const container = document.getElementById('main-content');
+
+  // Extraire les types uniques (sections)
+  const sections = [...new Set(data.map(item => item.type))];
+  createSectionButtons(sections);
+
+  // Trouver le nom de la dernière section (ex: 'Noticias')
+  const lastSectionName = sections[sections.length - 1];
+
+  sections.forEach(section => {
+    // Créer le titre
+    const sectionId = generateSectionId(section);
+    const title = document.createElement('h2');
+    title.id = sectionId;
+    title.textContent = section;
+    container.appendChild(title);
+
+    // Créer le conteneur des produits
+    const sectionContainer = document.createElement('div');
+    sectionContainer.className = 'section-container';
+    container.appendChild(sectionContainer);
+
+    // Filtrer les produits de cette section
+    const produits = data.filter(item => item.type === section);
+
+    produits.forEach(produit => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+
+      const isLastSection = (section === lastSectionName);
+
+      // Construction dynamique du HTML selon la section
+      let html = `
+        <h3>${escapeHtml(produit.nom)}</h3>
+        <p>${escapeHtml(produit.description)}</p>
+      `;
+
+      // Ajouter l'image uniquement si ce n'est pas la dernière section
+      if (!isLastSection && produit.img) {
+        html += `<img src="${escapeHtml(produit.img)}" alt="${escapeHtml(produit.nom)}">`;
+      }
+
+      // Ajouter le bouton uniquement si ce n'est pas la dernière section
+      if (!isLastSection) {
+        html += `
+          <button onclick="showPopup('${escapeHtml(produit.img)}', '${escapeHtml(produit.nom)}', '${encodeURIComponent(produit.description)}', '${escapeHtml(produit.prix)}', '${escapeHtml(produit.tailles)}', '${escapeHtml(produit.code)}')">
+            Voir
+          </button>
+        `;
+      }
+
+      card.innerHTML = html;
+      sectionContainer.appendChild(card);
+    });
+  });
+}
+
 
     
     
