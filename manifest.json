@@ -3,9 +3,10 @@
   "short_name": "RubMax",
   "start_url": "./index.html",
   "display": "standalone",
-   "gcm_sender_id": "482941778795",
   "background_color": "red",
   "theme_color": "#00b894",
+  
+   "gcm_sender_id": "482941778795",
   "icons": [
     {
       "src": "icon-192.png",
