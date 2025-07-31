@@ -1,0 +1,21 @@
+{
+  "name": "RubMax Serviços",
+  "short_name": "RubMax",
+  "start_url": "./index.html",
+  "display": "standalone",
+   "gcm_sender_id": "482941778795",
+  "background_color": "red",
+  "theme_color": "#00b894",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
