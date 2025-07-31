@@ -6,6 +6,8 @@ const urlsToCache = [
   "./script.js",
   "./install.js",
   "./manifest.json",
+  "./OneSignalSDKUpdaterWorker", 
+  "./OneSignalSDKWorker", 
   "./icon-192.png",
   "./icon-512.png"
 ];
