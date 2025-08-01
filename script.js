@@ -807,6 +807,15 @@ function initLogoTouchHandler(logo) {
 
 document.addEventListener('DOMContentLoaded', waitForLogoAndInit);
 
+(function() {
+  const addEventListenerOrig = EventTarget.prototype.addEventListener;
+  EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (type === 'touchstart' && options === undefined) {
+      options = { passive: true };
+    }
+    return addEventListenerOrig.call(this, type, listener, options);
+  };
+})();
 
 
 
