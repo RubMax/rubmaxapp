@@ -5,9 +5,7 @@ const urlsToCache = [
   "./styles.css",
   "./script.js",
   "./install.js",
-  "./manifest.json",
-  "./OneSignalSDKUpdaterWorker", 
-  "./OneSignalSDKWorker", 
+  "./manifest.json", 
   "./icon-192.png",
   "./icon-512.png"
 ];
@@ -40,3 +38,4 @@ self.addEventListener("fetch", (event) => {
   );
 });
 importScripts('https://cdn.onesignal.com/sdks/OneSignalSDKWorker.js');
+
